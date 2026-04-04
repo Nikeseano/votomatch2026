@@ -10,7 +10,7 @@
 
 body{
 font-family:Arial, sans-serif;
-background:#f4f6fb;
+background:#f3f6fb;
 margin:0;
 padding:20px;
 }
@@ -19,21 +19,22 @@ padding:20px;
 background:white;
 max-width:720px;
 margin:auto;
-padding:25px;
-border-radius:16px;
-box-shadow:0 5px 20px rgba(0,0,0,0.08);
+padding:28px;
+border-radius:18px;
+box-shadow:0 8px 24px rgba(0,0,0,0.08);
 margin-bottom:20px;
 }
 
 h1{
 margin-top:0;
+font-size:30px;
 }
 
 button{
 width:100%;
 padding:14px;
-margin-top:10px;
-border-radius:10px;
+margin-top:12px;
+border-radius:12px;
 border:1px solid #d1d5db;
 background:white;
 font-size:16px;
@@ -67,9 +68,9 @@ border-radius:20px;
 .pill{
 display:inline-block;
 background:#eef2ff;
-padding:6px 10px;
+padding:6px 12px;
 border-radius:20px;
-margin:4px;
+margin:5px;
 font-size:14px;
 }
 
@@ -82,6 +83,14 @@ font-size:14px;
 text-align:center;
 }
 
+.top{
+background:#ecfdf5;
+padding:14px;
+border-radius:14px;
+margin-bottom:14px;
+border:1px solid #bbf7d0;
+}
+
 </style>
 
 </head>
@@ -90,15 +99,14 @@ text-align:center;
 
 <div class="card center" id="intro">
 
-<h1>¿Con qué partido coincides más?</h1>
+<h1>Descubre tu perfil político</h1>
 
 <p>
 Responde 20 preguntas y compara tu posición política con partidos peruanos.
 </p>
 
 <p class="small">
-Este resultado es orientativo y no representa una recomendación de voto.
-Infórmate antes de decidir.
+El resultado es informativo y no constituye una recomendación de voto.
 </p>
 
 <button class="primary" onclick="start()">Empezar</button>
@@ -121,9 +129,15 @@ Infórmate antes de decidir.
 
 <h2>Tu perfil político</h2>
 
+<div class="top" id="topMatch"></div>
+
 <h3 id="tendencia"></h3>
 
 <div id="pills"></div>
+
+<h3>Top 3 coincidencias</h3>
+
+<div id="top3"></div>
 
 <h3>Coincidencia con partidos</h3>
 
@@ -143,7 +157,7 @@ Seguridad
 Instituciones
 <div class="bar"><div class="fill" id="insBar"></div></div>
 
-<button class="primary" onclick="location.reload()">Reiniciar test</button>
+<button class="primary" onclick="location.reload()">Reiniciar</button>
 
 </div>
 
@@ -151,23 +165,23 @@ Instituciones
 
 const preguntas=[
 
-"El Estado debe reducir el déficit fiscal incluso si implica reducir el gasto público.",
+"El Estado debe reducir el déficit fiscal aunque implique recortar gasto público.",
 
-"El Estado debería aumentar impuestos a la minería para financiar servicios públicos.",
+"El Estado debería aumentar impuestos a la minería.",
 
-"Empresas estratégicas como Petroperú deberían mantenerse bajo control estatal.",
+"Empresas estratégicas como Petroperú deberían seguir siendo estatales.",
 
 "El Perú debería firmar más tratados de libre comercio.",
 
-"Las empresas deberían tener mayor flexibilidad para contratar trabajadores.",
+"Las empresas deberían tener mayor flexibilidad laboral.",
 
-"El salario mínimo debería aumentar para mejorar el ingreso de los trabajadores.",
+"El salario mínimo debería aumentar.",
 
 "El Estado debería participar más en sectores económicos estratégicos.",
 
 "Las pequeñas empresas deberían pagar menos impuestos.",
 
-"Las Fuerzas Armadas deberían apoyar a la policía en la lucha contra el crimen.",
+"Las Fuerzas Armadas deberían apoyar a la policía contra el crimen.",
 
 "Las penas por delitos graves deberían endurecerse.",
 
@@ -181,9 +195,9 @@ const preguntas=[
 
 "Se deberían exigir más requisitos para crear partidos políticos.",
 
-"Las regiones deberían tener mayor presupuesto y autonomía.",
+"Las regiones deberían tener mayor autonomía.",
 
-"El Estado debería ampliar programas sociales para reducir pobreza.",
+"El Estado debería ampliar programas sociales.",
 
 "La educación sexual integral debería enseñarse en colegios.",
 
@@ -195,34 +209,31 @@ const preguntas=[
 
 const partidos={
 
-"Fuerza Popular":[2,1,2,2,2,1,1,1,2,2,0,2,0,2,2,1,1,0,0,0],
-
-"Renovación Popular":[2,0,2,2,2,0,0,1,2,2,0,2,0,2,2,0,0,0,0,0],
-
-"Avanza País":[2,0,0,2,2,0,0,2,2,2,0,2,0,2,2,0,0,1,1,0],
-
 "APP":[1,1,2,2,1,2,1,2,2,2,1,2,1,1,2,2,2,1,1,1],
-
-"Acción Popular":[1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1],
-
-"Juntos por el Perú":[0,2,2,1,0,2,2,2,0,1,2,1,1,1,1,2,2,2,2,2],
-
-"Perú Libre":[0,2,2,0,0,2,2,1,2,2,1,2,2,0,1,2,2,1,0,1],
 
 "Somos Perú":[1,1,1,2,1,2,1,2,1,2,2,2,1,1,2,2,2,2,2,1],
 
+"Fuerza Popular":[2,1,2,2,2,1,1,1,2,2,0,2,0,2,2,1,1,0,0,0],
+
+"Perú Libre":[0,2,2,0,0,2,2,1,2,2,1,2,2,0,1,2,2,1,0,1],
+
 "Podemos Perú":[1,1,2,1,1,2,1,2,2,2,1,2,1,2,2,1,2,1,1,1],
 
-"Partido Morado":[1,2,1,2,1,2,1,2,1,1,2,1,1,2,2,2,2,2,2,1]
+"Partido Morado":[1,2,1,2,1,2,1,2,1,1,2,1,1,2,2,2,2,2,2,1],
+
+"Avanza País":[2,0,0,2,2,0,0,2,2,2,0,2,0,2,2,0,0,1,1,0],
+
+"Renovación Popular":[2,0,2,2,2,0,0,1,2,2,0,2,0,2,2,0,0,0,0,0],
+
+"Acción Popular":[1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1],
+
+"Juntos por el Perú":[0,2,2,1,0,2,2,2,0,1,2,1,1,1,1,2,2,2,2,2]
 
 }
 
 let i=0
 let score={}
-
-for(let p in partidos){
-score[p]=0
-}
+for(let p in partidos) score[p]=0
 
 let eco=0
 let soc=0
@@ -230,20 +241,26 @@ let seg=0
 let ins=0
 
 function start(){
+
 intro.style.display="none"
 quiz.style.display="block"
 show()
+
 }
 
 function show(){
+
 counter.innerText="Pregunta "+(i+1)+" de "+preguntas.length
 q.innerText=preguntas[i]
+
 }
 
 function ans(v){
 
 for(let p in partidos){
+
 score[p]+=2-Math.abs(v-partidos[p][i])
+
 }
 
 if(i<8) eco+=v-1
@@ -258,19 +275,59 @@ if(i>=preguntas.length){
 quiz.style.display="none"
 res.style.display="block"
 
+let orden=Object.entries(score).sort((a,b)=>b[1]-a[1])
+
+let mejor=orden[0]
+let mejorPct=Math.round(mejor[1]/40*100)
+
+topMatch.innerHTML=`
+
+<b>${mejor[0]}</b><br>
+
+<span class="small">${mejorPct}% de coincidencia</span>
+
+`
+
+let topHTML=""
+
+orden.slice(0,3).forEach((p,idx)=>{
+
+let pct=Math.round(p[1]/40*100)
+
+topHTML+=`
+
+<div class="top">
+
+<b>#${idx+1} ${p[0]}</b>
+
+<br>
+
+<span class="small">${pct}%</span>
+
+</div>
+
+`
+
+})
+
+top3.innerHTML=topHTML
+
 let html=""
 
-Object.entries(score)
-.sort((a,b)=>b[1]-a[1])
-.forEach(p=>{
+orden.forEach(p=>{
 
-let pct=Math.round(p[1]/(preguntas.length*2)*100)
+let pct=Math.round(p[1]/40*100)
 
 html+=`
+
 <p><b>${p[0]}</b> ${pct}%</p>
+
 <div class="bar">
+
 <div class="fill" style="width:${pct}%"></div>
+
 </div>
+
 `
 
 })
@@ -280,6 +337,7 @@ ranking.innerHTML=html
 let t="centro"
 
 if(eco<0 && soc<0) t="izquierda progresista"
+
 if(eco>0 && soc>0) t="derecha conservadora"
 
 tendencia.innerText="Tendencia: "+t
@@ -297,17 +355,16 @@ pills.innerHTML=`
 `
 
 ecoBar.style.width=((eco+8)/16*100)+"%"
+
 socBar.style.width=((soc+4)/8*100)+"%"
+
 segBar.style.width=((seg+4)/8*100)+"%"
+
 insBar.style.width=((ins+4)/8*100)+"%"
 
 }
 
-else{
-
-show()
-
-}
+else show()
 
 }
 
