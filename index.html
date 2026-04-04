@@ -4,41 +4,82 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>VotoMatch 2026</title>
+<title>VotoMatch Perú</title>
 
 <style>
 
 body{
-font-family:Arial;
-background:#f5f5f5;
+font-family:Arial, sans-serif;
+background:#f4f6fb;
 margin:0;
 padding:20px;
 }
 
 .card{
 background:white;
-padding:20px;
-border-radius:10px;
+max-width:720px;
 margin:auto;
-max-width:500px;
+padding:25px;
+border-radius:16px;
+box-shadow:0 5px 20px rgba(0,0,0,0.08);
+margin-bottom:20px;
+}
+
+h1{
+margin-top:0;
 }
 
 button{
 width:100%;
-padding:15px;
+padding:14px;
 margin-top:10px;
+border-radius:10px;
+border:1px solid #d1d5db;
+background:white;
+font-size:16px;
+cursor:pointer;
 }
 
-.progress{
-height:5px;
-background:#eee;
-margin-bottom:15px;
+button:hover{
+background:#eef2ff;
+}
+
+.primary{
+background:#2563eb;
+color:white;
+border:none;
+font-weight:bold;
 }
 
 .bar{
-height:5px;
-background:#4CAF50;
-width:0%;
+height:10px;
+background:#e5e7eb;
+border-radius:20px;
+margin:6px 0 18px 0;
+}
+
+.fill{
+height:10px;
+background:#22c55e;
+border-radius:20px;
+}
+
+.pill{
+display:inline-block;
+background:#eef2ff;
+padding:6px 10px;
+border-radius:20px;
+margin:4px;
+font-size:14px;
+}
+
+.small{
+color:#6b7280;
+font-size:14px;
+}
+
+.center{
+text-align:center;
 }
 
 </style>
@@ -47,69 +88,227 @@ width:0%;
 
 <body>
 
-<div class="card">
+<div class="card center" id="intro">
 
-<h2>Haz click en empezar</h2>
+<h1>¿Con qué partido coincides más?</h1>
 
-<div class="progress">
-<div class="bar" id="bar"></div>
+<p>
+Responde 20 preguntas y compara tu posición política con partidos peruanos.
+</p>
+
+<p class="small">
+Este resultado es orientativo y no representa una recomendación de voto.
+Infórmate antes de decidir.
+</p>
+
+<button class="primary" onclick="start()">Empezar</button>
+
 </div>
 
-<button onclick="start()">Empezar</button>
+<div class="card" id="quiz" style="display:none">
 
-<div id="quiz"></div>
+<h3 id="counter"></h3>
+
+<h2 id="q"></h2>
+
+<button onclick="ans(2)">De acuerdo</button>
+<button onclick="ans(1)">Neutral</button>
+<button onclick="ans(0)">En desacuerdo</button>
+
+</div>
+
+<div class="card" id="res" style="display:none">
+
+<h2>Tu perfil político</h2>
+
+<h3 id="tendencia"></h3>
+
+<div id="pills"></div>
+
+<h3>Coincidencia con partidos</h3>
+
+<div id="ranking"></div>
+
+<h3>Ejes ideológicos</h3>
+
+Economía
+<div class="bar"><div class="fill" id="ecoBar"></div></div>
+
+Valores sociales
+<div class="bar"><div class="fill" id="socBar"></div></div>
+
+Seguridad
+<div class="bar"><div class="fill" id="segBar"></div></div>
+
+Instituciones
+<div class="bar"><div class="fill" id="insBar"></div></div>
+
+<button class="primary" onclick="location.reload()">Reiniciar test</button>
 
 </div>
 
 <script>
 
-let preguntas = [
-"El estado debe invertir más en salud pública",
-"Se deben reducir impuestos a empresas",
-"El aborto debe ser legal",
-"Más inversión en educación pública",
-"Se debe reducir la inmigración",
-"El estado debe regular precios básicos",
-"Más apoyo a policía",
-"Protección del medio ambiente debe ser prioridad"
-];
+const preguntas=[
 
-let index=0;
+"El Estado debe reducir el déficit fiscal incluso si implica reducir el gasto público.",
+
+"El Estado debería aumentar impuestos a la minería para financiar servicios públicos.",
+
+"Empresas estratégicas como Petroperú deberían mantenerse bajo control estatal.",
+
+"El Perú debería firmar más tratados de libre comercio.",
+
+"Las empresas deberían tener mayor flexibilidad para contratar trabajadores.",
+
+"El salario mínimo debería aumentar para mejorar el ingreso de los trabajadores.",
+
+"El Estado debería participar más en sectores económicos estratégicos.",
+
+"Las pequeñas empresas deberían pagar menos impuestos.",
+
+"Las Fuerzas Armadas deberían apoyar a la policía en la lucha contra el crimen.",
+
+"Las penas por delitos graves deberían endurecerse.",
+
+"La prevención social del delito es más efectiva que aumentar castigos.",
+
+"El presupuesto de la policía debería aumentar.",
+
+"El Perú necesita una reforma constitucional profunda.",
+
+"La reelección inmediata de congresistas debería permitirse.",
+
+"Se deberían exigir más requisitos para crear partidos políticos.",
+
+"Las regiones deberían tener mayor presupuesto y autonomía.",
+
+"El Estado debería ampliar programas sociales para reducir pobreza.",
+
+"La educación sexual integral debería enseñarse en colegios.",
+
+"El Estado debería reconocer la unión civil entre personas del mismo sexo.",
+
+"La minería debería prohibirse en cabeceras de cuenca."
+
+]
+
+const partidos={
+
+"Fuerza Popular":[2,1,2,2,2,1,1,1,2,2,0,2,0,2,2,1,1,0,0,0],
+
+"Renovación Popular":[2,0,2,2,2,0,0,1,2,2,0,2,0,2,2,0,0,0,0,0],
+
+"Avanza País":[2,0,0,2,2,0,0,2,2,2,0,2,0,2,2,0,0,1,1,0],
+
+"APP":[1,1,2,2,1,2,1,2,2,2,1,2,1,1,2,2,2,1,1,1],
+
+"Acción Popular":[1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1],
+
+"Juntos por el Perú":[0,2,2,1,0,2,2,2,0,1,2,1,1,1,1,2,2,2,2,2],
+
+"Perú Libre":[0,2,2,0,0,2,2,1,2,2,1,2,2,0,1,2,2,1,0,1],
+
+"Somos Perú":[1,1,1,2,1,2,1,2,1,2,2,2,1,1,2,2,2,2,2,1],
+
+"Podemos Perú":[1,1,2,1,1,2,1,2,2,2,1,2,1,2,2,1,2,1,1,1],
+
+"Partido Morado":[1,2,1,2,1,2,1,2,1,1,2,1,1,2,2,2,2,2,2,1]
+
+}
+
+let i=0
+let score={}
+
+for(let p in partidos){
+score[p]=0
+}
+
+let eco=0
+let soc=0
+let seg=0
+let ins=0
 
 function start(){
-mostrarPregunta();
+intro.style.display="none"
+quiz.style.display="block"
+show()
 }
 
-function mostrarPregunta(){
+function show(){
+counter.innerText="Pregunta "+(i+1)+" de "+preguntas.length
+q.innerText=preguntas[i]
+}
 
-if(index>=preguntas.length){
+function ans(v){
 
-document.getElementById("quiz").innerHTML="<h3>Gracias por participar</h3>";
-return;
+for(let p in partidos){
+score[p]+=2-Math.abs(v-partidos[p][i])
+}
+
+if(i<8) eco+=v-1
+else if(i<12) seg+=v-1
+else if(i<16) ins+=v-1
+else soc+=v-1
+
+i++
+
+if(i>=preguntas.length){
+
+quiz.style.display="none"
+res.style.display="block"
+
+let html=""
+
+Object.entries(score)
+.sort((a,b)=>b[1]-a[1])
+.forEach(p=>{
+
+let pct=Math.round(p[1]/(preguntas.length*2)*100)
+
+html+=`
+<p><b>${p[0]}</b> ${pct}%</p>
+<div class="bar">
+<div class="fill" style="width:${pct}%"></div>
+</div>
+`
+
+})
+
+ranking.innerHTML=html
+
+let t="centro"
+
+if(eco<0 && soc<0) t="izquierda progresista"
+if(eco>0 && soc>0) t="derecha conservadora"
+
+tendencia.innerText="Tendencia: "+t
+
+pills.innerHTML=`
+
+<span class="pill">Economía ${eco>0?"liberal":"estatista"}</span>
+
+<span class="pill">Valores ${soc<0?"progresista":"conservador"}</span>
+
+<span class="pill">Seguridad ${seg>0?"mano dura":"preventivo"}</span>
+
+<span class="pill">Instituciones ${ins>0?"reforma fuerte":"gradual"}</span>
+
+`
+
+ecoBar.style.width=((eco+8)/16*100)+"%"
+socBar.style.width=((soc+4)/8*100)+"%"
+segBar.style.width=((seg+4)/8*100)+"%"
+insBar.style.width=((ins+4)/8*100)+"%"
 
 }
 
-let progreso=(index/preguntas.length)*100;
+else{
 
-document.getElementById("bar").style.width=progreso+"%";
-
-document.getElementById("quiz").innerHTML=`
-
-<h3>${preguntas[index]}</h3>
-
-<button onclick="next()">De acuerdo</button>
-
-<button onclick="next()">Neutral</button>
-
-<button onclick="next()">En desacuerdo</button>
-
-`;
+show()
 
 }
 
-function next(){
-index++;
-mostrarPregunta();
 }
 
 </script>
