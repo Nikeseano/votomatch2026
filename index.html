@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VotoMatch 2026</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f5f5f5;
+margin:0;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+margin:auto;
+max-width:500px;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:10px;
+}
+
+.progress{
+height:5px;
+background:#eee;
+margin-bottom:15px;
+}
+
+.bar{
+height:5px;
+background:#4CAF50;
+width:0%;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Haz click en empezar</h2>
+
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+
+<button onclick="start()">Empezar</button>
+
+<div id="quiz"></div>
+
+</div>
+
+<script>
+
+let preguntas = [
+"El estado debe invertir más en salud pública",
+"Se deben reducir impuestos a empresas",
+"El aborto debe ser legal",
+"Más inversión en educación pública",
+"Se debe reducir la inmigración",
+"El estado debe regular precios básicos",
+"Más apoyo a policía",
+"Protección del medio ambiente debe ser prioridad"
+];
+
+let index=0;
+
+function start(){
+mostrarPregunta();
+}
+
+function mostrarPregunta(){
+
+if(index>=preguntas.length){
+
+document.getElementById("quiz").innerHTML="<h3>Gracias por participar</h3>";
+return;
+
+}
+
+let progreso=(index/preguntas.length)*100;
+
+document.getElementById("bar").style.width=progreso+"%";
+
+document.getElementById("quiz").innerHTML=`
+
+<h3>${preguntas[index]}</h3>
+
+<button onclick="next()">De acuerdo</button>
+
+<button onclick="next()">Neutral</button>
+
+<button onclick="next()">En desacuerdo</button>
+
+`;
+
+}
+
+function next(){
+index++;
+mostrarPregunta();
+}
+
+</script>
+
+</body>
+</html>
