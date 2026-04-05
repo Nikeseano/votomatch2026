@@ -1,541 +1,777 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VotoMatch Perú 2026</title>
+  <meta name="description" content="Responde 20 preguntas y descubre con qué partido político coincides más en Perú." />
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --soft:#eef2ff;
+      --line:#dbe1ea;
+      --primary:#4361ee;
+      --primary-2:#3651d4;
+      --success:#22c55e;
+      --top:#ecfdf5;
+      --top-border:#bbf7d0;
+    }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    body.dark{
+      --bg:#0f172a;
+      --card:#111827;
+      --text:#f8fafc;
+      --muted:#94a3b8;
+      --soft:#1e293b;
+      --line:#334155;
+      --primary:#60a5fa;
+      --primary-2:#3b82f6;
+      --success:#22c55e;
+      --top:#052e1b;
+      --top-border:#166534;
+    }
 
-<title>VotoMatch Perú 2026 | Test político</title>
+    *{box-sizing:border-box}
 
-<meta name="description" content="Descubre con qué partido político coincides más en Perú. Test político estilo Wahl-O-Mat para elecciones 2026.">
+    body{
+      margin:0;
+      padding:20px;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
 
-<meta name="keywords" content="test político Perú, elecciones 2026 Perú, partidos políticos Perú, votación Perú, test ideológico">
+    .card{
+      max-width:720px;
+      margin:0 auto 20px auto;
+      background:var(--card);
+      border-radius:22px;
+      padding:28px;
+      box-shadow:0 12px 28px rgba(0,0,0,.08);
+    }
 
-<link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Peru.svg">
+    h1,h2,h3,p{margin-top:0}
+    h1{font-size:34px; line-height:1.1}
+    h2{font-size:28px; line-height:1.2}
+    h3{font-size:20px}
 
-<style>
+    .mode{
+      display:flex;
+      justify-content:flex-end;
+      margin-bottom:10px;
+    }
 
-body{
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI";
-background:#f5f7fb;
-margin:0;
-padding:20px;
-}
+    .mode button{
+      width:auto;
+      min-width:92px;
+      margin:0;
+      padding:10px 14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:var(--card);
+      color:var(--text);
+      cursor:pointer;
+    }
 
-.card{
-background:white;
-max-width:700px;
-margin:auto;
-padding:28px;
-border-radius:18px;
-margin-bottom:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.08);
-}
+    .eyebrow{
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:.04em;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
 
-h1,h2{
-margin-top:0;
-}
+    .sub{
+      color:var(--muted);
+      line-height:1.55;
+    }
 
-.header{
-font-size:14px;
-opacity:0.7;
-margin-bottom:10px;
-}
+    .stats{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:14px 0 10px;
+    }
 
-button{
-width:100%;
-padding:16px;
-margin-top:10px;
-border-radius:14px;
-border:none;
-font-size:16px;
-cursor:pointer;
-}
+    .badge{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      background:var(--soft);
+      font-size:13px;
+      color:var(--text);
+    }
 
-.answer{
-background:#f1f5f9;
-}
+    .quiz-top{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-bottom:12px;
+    }
 
-.selected{
-background:#4361ee;
-color:white;
-}
+    .quiz-top button{
+      width:auto;
+      margin:0;
+      min-width:120px;
+    }
 
-.primary{
-background:#4361ee;
-color:white;
-}
+    .quiz-top h3{
+      flex:1;
+      margin:0;
+      text-align:center;
+    }
 
-.progress{
-height:8px;
-background:#e5e7eb;
-border-radius:20px;
-margin:15px 0 20px 0;
-}
+    .progress{
+      height:10px;
+      border-radius:999px;
+      background:var(--soft);
+      overflow:hidden;
+      margin:12px 0 26px;
+    }
 
-.progress div{
-height:8px;
-background:#4361ee;
-border-radius:20px;
-}
+    .progress div{
+      height:10px;
+      width:0%;
+      background:linear-gradient(90deg,var(--primary),var(--primary-2));
+      border-radius:999px;
+      transition:width .2s ease;
+    }
 
-.logo-box{
-text-align:center;
-margin-top:25px;
-font-weight:bold;
-letter-spacing:5px;
-opacity:0.4;
-}
+    .question{
+      font-size:28px;
+      line-height:1.25;
+      margin-bottom:18px;
+    }
 
-.top{
-display:flex;
-align-items:center;
-gap:12px;
-background:#f0fdf4;
-padding:12px;
-border-radius:12px;
-margin-bottom:12px;
-}
+    button{
+      width:100%;
+      padding:16px;
+      margin-top:10px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#f8fafc;
+      color:var(--text);
+      font-size:16px;
+      cursor:pointer;
+      transition:.15s ease;
+    }
 
-.top img{
-width:40px;
-height:40px;
-border-radius:8px;
-}
+    body.dark button{
+      background:#182233;
+    }
 
-.bar{
-height:8px;
-background:#e5e7eb;
-border-radius:20px;
-margin:5px 0 15px 0;
-}
+    button:hover{
+      opacity:.96;
+      transform:translateY(-1px);
+    }
 
-.fill{
-height:8px;
-background:#22c55e;
-border-radius:20px;
-}
+    .primary{
+      background:var(--primary);
+      color:white;
+      border:none;
+      font-weight:700;
+    }
 
-.small{
-font-size:13px;
-opacity:0.6;
-}
+    .answer.selected{
+      background:var(--primary);
+      color:#fff;
+      border-color:var(--primary);
+    }
 
-</style>
+    .logo-box{
+      text-align:center;
+      margin-top:28px;
+      font-size:20px;
+      font-weight:800;
+      letter-spacing:8px;
+      opacity:.35;
+    }
 
+    .note{
+      background:var(--soft);
+      border-left:4px solid var(--primary);
+      border-radius:14px;
+      padding:16px;
+      margin:18px 0;
+    }
+
+    .note p:last-child{margin-bottom:0}
+
+    .pill{
+      display:inline-block;
+      background:var(--soft);
+      color:var(--text);
+      padding:7px 12px;
+      border-radius:999px;
+      margin:4px 6px 4px 0;
+      font-size:13px;
+    }
+
+    .top-card{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      background:var(--top);
+      border:1px solid var(--top-border);
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:12px;
+    }
+
+    .logo-wrap{
+      width:52px;
+      height:52px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      flex-shrink:0;
+    }
+
+    .logo-wrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .logo-fallback{
+      font-weight:800;
+      font-size:13px;
+      color:#111827;
+      text-align:center;
+      line-height:1.1;
+      padding:4px;
+    }
+
+    .party-name{
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .candidate{
+      color:var(--muted);
+      font-size:14px;
+      margin-top:2px;
+    }
+
+    .score{
+      margin-top:4px;
+      font-weight:700;
+      color:var(--success);
+      font-size:15px;
+    }
+
+    .bar{
+      height:10px;
+      background:var(--soft);
+      border-radius:999px;
+      overflow:hidden;
+      margin:6px 0 16px;
+    }
+
+    .fill{
+      height:10px;
+      background:var(--success);
+      border-radius:999px;
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .row-title{
+      margin-top:18px;
+      margin-bottom:4px;
+      font-weight:700;
+    }
+
+    .actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .actions .full{
+      grid-column:1 / -1;
+    }
+
+    .divider{
+      height:1px;
+      background:var(--line);
+      margin:18px 0;
+    }
+
+    @media (max-width:640px){
+      body{padding:14px}
+      .card{padding:20px}
+      .question{font-size:24px}
+      .quiz-top{flex-wrap:wrap}
+      .quiz-top button{min-width:100%}
+      .actions{grid-template-columns:1fr}
+    }
+  </style>
 </head>
-
-
-
 <body>
 
+  <div class="card" id="intro">
+    <div class="mode">
+      <button onclick="toggleMode()">🌙 / ☀️</button>
+    </div>
 
+    <div class="eyebrow">🇵🇪 Elecciones 2026</div>
+    <h1>¿Con qué partido coincides más?</h1>
+    <p class="sub">
+      Responde 20 preguntas y compara tus respuestas con una matriz referencial de partidos políticos peruanos.
+    </p>
 
-<div class="card" id="intro">
-
-<h1>VotoMatch Perú</h1>
-
-<p>
-Descubre con qué partido coincides más.
-</p>
-
-<button onclick="start()" class="primary">
-Empezar test
-</button>
-
-<p class="small">
-Herramienta informativa.
-</p>
-
-</div>
-
-
-
-<div class="card" id="quiz" style="display:none">
-
-<div class="header">
-🇵🇪 Elecciones 2026
-</div>
-
-<button onclick="prev()">
-← Anterior
-</button>
-
-<h3 id="counter"></h3>
-
-<div class="progress">
-<div id="prog"></div>
-</div>
-
-<h2 id="q"></h2>
-
-<button id="b2" class="answer" onclick="ans(2)">
-De acuerdo
-</button>
-
-<button id="b1" class="answer" onclick="ans(1)">
-Neutral
-</button>
-
-<button id="b0" class="answer" onclick="ans(0)">
-En desacuerdo
-</button>
-
-<div class="logo-box">
-TÚ DECIDES
-</div>
-
-</div>
-
-
-
-
-<div class="card" id="res" style="display:none">
-
-<h2>Resultado</h2>
-
-<h3 id="tend"></h3>
-
-<h3>Top coincidencias</h3>
-
-<div id="top3"></div>
-
-
-<h3>Todos los partidos</h3>
-
-<div id="lista"></div>
-
-
-
-<button onclick="share()" class="primary">
-Compartir resultado
-</button>
-
-<button onclick="location.reload()">
-Reiniciar
-</button>
-
-</div>
-
-
-
-
-
-<script>
-
-
-
-const preguntas=[
-
-"El Estado debe reducir el déficit fiscal.",
-"Aumentar impuestos a minería.",
-"Empresas estatales estratégicas.",
-"Más tratados de libre comercio.",
-"Flexibilidad laboral.",
-"Subir salario mínimo.",
-"Más rol económico del Estado.",
-"Menos impuestos a pymes.",
-"Militares contra crimen.",
-"Penas más duras.",
-"Prevención del delito.",
-"Más presupuesto policía.",
-"Reforma constitucional.",
-"Reelección congresal.",
-"Más requisitos a partidos.",
-"Más autonomía regional.",
-"Más programas sociales.",
-"Educación sexual.",
-"Unión civil.",
-"Restricción minería."
-
-];
-
-
-
-const partidos={
-
-"Fuerza Popular":{
-
-respuestas:[2,1,2,2,2,1,1,1,2,2,0,2,0,2,2,1,1,0,0,0],
-
-logo:"https://upload.wikimedia.org/wikipedia/commons/3/34/Fuerza_Popular_logo.png",
-
-candidato:"Keiko Fujimori"
-
-},
-
-"Perú Libre":{
-
-respuestas:[0,2,2,0,0,2,2,1,2,2,1,2,2,0,1,2,2,1,0,1],
-
-logo:"https://upload.wikimedia.org/wikipedia/commons/0/0f/Peru_Libre_logo.png",
-
-candidato:"Vladimir Cerrón"
-
-},
-
-"Partido Morado":{
-
-respuestas:[1,2,1,2,1,2,1,2,1,1,2,1,1,2,2,2,2,2,2,1],
-
-logo:"https://upload.wikimedia.org/wikipedia/commons/5/57/Partido_Morado_logo.png",
-
-candidato:"Julio Guzmán"
-
-},
-
-"APP":{
-
-respuestas:[1,1,2,2,1,2,1,2,2,2,1,2,1,1,2,2,2,1,1,1],
-
-logo:"https://upload.wikimedia.org/wikipedia/commons/0/06/Alianza_para_el_Progreso_logo.png",
-
-candidato:"César Acuña"
-
-},
-
-"Avanza País":{
-
-respuestas:[2,0,0,2,2,0,0,2,2,2,0,2,0,2,2,0,0,1,1,0],
-
-logo:"https://upload.wikimedia.org/wikipedia/commons/1/16/Avanza_Pais_logo.png",
-
-candidato:"Hernando de Soto"
-
-}
-
-};
-
-
-
-let i=0;
-
-let resp=[];
-
-
-
-function start(){
-
-intro.style.display="none";
-
-quiz.style.display="block";
-
-show();
-
-}
-
-
-
-function show(){
-
-counter.innerText=
-"Pregunta "+(i+1)+" de "+preguntas.length;
-
-q.innerText=preguntas[i];
-
-prog.style.width=
-(i/preguntas.length*100)+"%";
-
-paint();
-
-}
-
-
-
-function paint(){
-
-b0.classList.remove("selected");
-
-b1.classList.remove("selected");
-
-b2.classList.remove("selected");
-
-if(resp[i]==0)b0.classList.add("selected");
-
-if(resp[i]==1)b1.classList.add("selected");
-
-if(resp[i]==2)b2.classList.add("selected");
-
-}
-
-
-
-function ans(v){
-
-resp[i]=v;
-
-if(i<preguntas.length-1){
-
-i++;
-
-show();
-
-}
-
-else{
-
-calc();
-
-}
-
-}
-
-
-
-function prev(){
-
-if(i>0){
-
-i--;
-
-show();
-
-}
-
-}
-
-
-
-function calc(){
-
-let resultados=[];
-
-
-
-for(let p in partidos){
-
-let puntos=0;
-
-
-
-for(let j=0;j<preguntas.length;j++){
-
-puntos+=
-
-2-Math.abs(
-
-resp[j]-partidos[p].respuestas[j]
-
-);
-
-}
-
-
-
-resultados.push({
-
-nombre:p,
-
-score:puntos,
-
-logo:partidos[p].logo,
-
-candidato:partidos[p].candidato
-
-});
-
-}
-
-
-
-resultados.sort((a,b)=>b.score-a.score);
-
-
-
-quiz.style.display="none";
-
-res.style.display="block";
-
-
-
-tend.innerText=
-"Mayor coincidencia con "+resultados[0].nombre;
-
-
-
-let html="";
-
-
-
-resultados.slice(0,3)
-
-.forEach(r=>{
-
-let pct=Math.round(r.score/40*100);
-
-
-
-html+=`
-
-<div class="top">
-
-<img src="${r.logo}">
-
-<div>
-
-<b>${r.nombre}</b><br>
-
-${r.candidato}<br>
-
-${pct}%
-
-</div>
-
-</div>
-
-`;
-
-
-
-});
-
-
-
-top3.innerHTML=html;
-
-
-
-let listaHTML="";
-
-
-
-resultados.forEach(r=>{
-
-let pct=Math.round(r.score/40*100);
-
-
-
-listaHTML+=
-
-`<p>${r.nombre} ${pct}%</p>`;
-
-
-
-});
-
-
-
-lista.innerHTML=listaHTML;
-
-
-
-}
-
-
-
-function share(){
-
-navigator.clipboard.writeText(location.href);
-
-alert("Link copiado");
-
-}
-
-
-
-</script>
-
-
-
+    <div class="stats">
+      <span class="badge">20 preguntas</span>
+      <span class="badge">Resultado inmediato</span>
+      <span class="badge">TÚ DECIDES</span>
+    </div>
+
+    <p class="small">Visitas en este dispositivo: <span id="visits">0</span></p>
+
+    <button class="primary" onclick="start()">Empezar</button>
+
+    <p class="small" style="margin-top:14px">
+      Herramienta informativa. No constituye una recomendación de voto.
+    </p>
+  </div>
+
+  <div class="card" id="quiz" style="display:none">
+    <div class="mode">
+      <button onclick="toggleMode()">🌙 / ☀️</button>
+    </div>
+
+    <div class="eyebrow">🇵🇪 Elecciones 2026</div>
+
+    <div class="quiz-top">
+      <button onclick="prev()">← Anterior</button>
+      <h3 id="counter"></h3>
+    </div>
+
+    <div class="progress">
+      <div id="prog"></div>
+    </div>
+
+    <h2 class="question" id="q"></h2>
+
+    <button id="b2" class="answer" onclick="ans(2)">De acuerdo</button>
+    <button id="b1" class="answer" onclick="ans(1)">Neutral</button>
+    <button id="b0" class="answer" onclick="ans(0)">En desacuerdo</button>
+
+    <div class="logo-box">TÚ DECIDES</div>
+  </div>
+
+  <div class="card" id="res" style="display:none">
+    <div class="mode">
+      <button onclick="toggleMode()">🌙 / ☀️</button>
+    </div>
+
+    <div class="eyebrow">🇵🇪 Elecciones 2026</div>
+    <h2>Tu resultado</h2>
+
+    <div id="topMatch"></div>
+
+    <h3 id="tend"></h3>
+    <div id="pills"></div>
+
+    <div class="note">
+      <h3>Cómo leer tu resultado</h3>
+      <p id="perfilExplicacion" class="small"></p>
+      <p id="partidoExplicacion" class="small"></p>
+      <p id="fortalezasExplicacion" class="small"></p>
+      <p id="diferenciasExplicacion" class="small"></p>
+    </div>
+
+    <h3>Top 3 coincidencias</h3>
+    <div id="top3"></div>
+
+    <h3>Coincidencia con partidos</h3>
+    <div id="lista"></div>
+
+    <div class="divider"></div>
+
+    <h3>Dimensiones ideológicas</h3>
+
+    <div class="row-title">Economía</div>
+    <div class="bar"><div id="eco" class="fill"></div></div>
+
+    <div class="row-title">Valores sociales</div>
+    <div class="bar"><div id="soc" class="fill"></div></div>
+
+    <div class="row-title">Seguridad</div>
+    <div class="bar"><div id="seg" class="fill"></div></div>
+
+    <div class="row-title">Instituciones</div>
+    <div class="bar"><div id="ins" class="fill"></div></div>
+
+    <div class="actions">
+      <button onclick="shareResult()">Compartir resultado</button>
+      <button onclick="copyLink()">Copiar link</button>
+      <button class="primary full" onclick="location.reload()">Reiniciar</button>
+    </div>
+
+    <p class="small" style="margin-top:16px">
+      Resultado orientativo y simplificado.
+    </p>
+  </div>
+
+  <script>
+    const preguntas = [
+      "El Estado debería reducir el déficit fiscal aunque eso implique recortar parte del gasto público.",
+      "El Estado debería aumentar los impuestos que paga la gran minería.",
+      "Empresas estratégicas como Petroperú deberían mantenerse bajo control estatal.",
+      "El Perú debería firmar más tratados de libre comercio con otros países.",
+      "Las empresas deberían tener más flexibilidad para contratar y despedir trabajadores.",
+      "El salario mínimo debería aumentar para mejorar el ingreso de los trabajadores.",
+      "El Estado debería tener mayor participación en sectores clave de la economía.",
+      "Las pequeñas y medianas empresas deberían pagar menos impuestos.",
+      "Las Fuerzas Armadas deberían apoyar a la Policía en la lucha contra la delincuencia.",
+      "Las penas por delitos graves deberían endurecerse aún más.",
+      "La prevención social del delito es más importante que aumentar castigos.",
+      "El presupuesto de la Policía debería incrementarse de manera prioritaria.",
+      "El Perú necesita una reforma constitucional profunda.",
+      "La reelección inmediata de congresistas debería permitirse.",
+      "Debería ser más difícil inscribir nuevos partidos políticos.",
+      "Las regiones deberían tener mayor autonomía para decidir sobre su presupuesto y gestión.",
+      "El Estado debería ampliar los programas sociales para reducir pobreza y desigualdad.",
+      "La educación sexual integral debería enseñarse en los colegios.",
+      "El Estado debería reconocer la unión civil entre personas del mismo sexo.",
+      "La minería debería prohibirse en cabeceras de cuenca o zonas ambientalmente sensibles."
+    ];
+
+    const partidos = {
+      "Fuerza Popular":{
+        respuestas:[2,1,2,2,2,1,1,1,2,2,0,2,0,2,2,1,1,0,0,0],
+        logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Fuerza_Popular_logo.png/200px-Fuerza_Popular_logo.png",
+        candidato:"Keiko Fujimori",
+        fallback:"FP"
+      },
+      "APP":{
+        respuestas:[1,1,2,2,1,2,1,2,2,2,1,2,1,1,2,2,2,1,1,1],
+        logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Alianza_para_el_Progreso_logo.png/200px-Alianza_para_el_Progreso_logo.png",
+        candidato:"César Acuña",
+        fallback:"APP"
+      },
+      "Avanza País":{
+        respuestas:[2,0,0,2,2,0,0,2,2,2,0,2,0,2,2,0,0,1,1,0],
+        logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Avanza_Pais_logo.png/200px-Avanza_Pais_logo.png",
+        candidato:"Hernando de Soto",
+        fallback:"AP"
+      },
+      "Partido Morado":{
+        respuestas:[1,2,1,2,1,2,1,2,1,1,2,1,1,2,2,2,2,2,2,1],
+        logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Partido_Morado_logo.png/200px-Partido_Morado_logo.png",
+        candidato:"Julio Guzmán",
+        fallback:"PM"
+      },
+      "Perú Libre":{
+        respuestas:[0,2,2,0,0,2,2,1,2,2,1,2,2,0,1,2,2,1,0,1],
+        logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Peru_Libre_logo.png/200px-Peru_Libre_logo.png",
+        candidato:"Vladimir Cerrón",
+        fallback:"PL"
+      },
+      "Renovación Popular":{
+        respuestas:[2,0,2,2,2,0,0,1,2,2,0,2,0,2,2,0,0,0,0,0],
+        logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Renovacion_Popular_logo.png/200px-Renovacion_Popular_logo.png",
+        candidato:"Rafael López Aliaga",
+        fallback:"RP"
+      },
+      "Somos Perú":{
+        respuestas:[1,1,1,2,1,2,1,2,1,2,2,2,1,1,2,2,2,2,2,1],
+        logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Somos_Peru_logo.png/200px-Somos_Peru_logo.png",
+        candidato:"Patricia Li",
+        fallback:"SP"
+      }
+    };
+
+    let i = 0;
+    let respuestasUsuario = [];
+    let score = {};
+    let sortedResults = [];
+    let ecoScore = 0;
+    let socScore = 0;
+    let segScore = 0;
+    let insScore = 0;
+
+    for (let p in partidos) score[p] = 0;
+
+    function start(){
+      intro.style.display = "none";
+      quiz.style.display = "block";
+      show();
+    }
+
+    function show(){
+      counter.innerText = "Pregunta " + (i + 1) + " de " + preguntas.length;
+      q.innerText = preguntas[i];
+      prog.style.width = ((i) / preguntas.length * 100) + "%";
+      paint();
+    }
+
+    function paint(){
+      b0.classList.remove("selected");
+      b1.classList.remove("selected");
+      b2.classList.remove("selected");
+
+      if (respuestasUsuario[i] === 0) b0.classList.add("selected");
+      if (respuestasUsuario[i] === 1) b1.classList.add("selected");
+      if (respuestasUsuario[i] === 2) b2.classList.add("selected");
+    }
+
+    function ans(v){
+      respuestasUsuario[i] = v;
+      if (i < preguntas.length - 1){
+        i++;
+        show();
+      } else {
+        calc();
+      }
+    }
+
+    function prev(){
+      if (i > 0){
+        i--;
+        show();
+      }
+    }
+
+    function calc(){
+      for (let p in score) score[p] = 0;
+
+      ecoScore = 0;
+      socScore = 0;
+      segScore = 0;
+      insScore = 0;
+
+      for (let j = 0; j < respuestasUsuario.length; j++){
+        const v = respuestasUsuario[j];
+
+        for (let p in partidos){
+          score[p] += 2 - Math.abs(v - partidos[p].respuestas[j]);
+        }
+
+        if (j < 8) ecoScore += v - 1;
+        else if (j < 12) segScore += v - 1;
+        else if (j < 16) insScore += v - 1;
+        else socScore += v - 1;
+      }
+
+      quiz.style.display = "none";
+      res.style.display = "block";
+      mostrarResultado();
+    }
+
+    function profileLabel(eco, soc){
+      if (eco < 0 && soc < 0) return "izquierda progresista";
+      if (eco > 0 && soc > 0) return "derecha conservadora";
+      if (eco > 0 && soc <= 0) return "centro-derecha";
+      if (eco <= 0 && soc < 0) return "centro-izquierda";
+      return "centro";
+    }
+
+    function perfilHumano(eco, soc, seg, ins){
+      let partes = [];
+
+      if (eco > 1) partes.push("en economía te inclinas hacia posiciones más liberales");
+      else if (eco < -1) partes.push("en economía prefieres un Estado más presente");
+      else partes.push("en economía estás relativamente cerca del centro");
+
+      if (soc > 0.5) partes.push("en valores sociales tiendes a posiciones más conservadoras");
+      else if (soc < -0.5) partes.push("en valores sociales tiendes a posiciones más progresistas");
+      else partes.push("en valores sociales mantienes una posición intermedia");
+
+      if (seg > 0.5) partes.push("en seguridad prefieres respuestas más duras frente al delito");
+      else if (seg < -0.5) partes.push("en seguridad priorizas más la prevención que el castigo");
+      else partes.push("en seguridad tienes una posición mixta");
+
+      if (ins > 0.5) partes.push("y en instituciones prefieres reglas más estrictas o cambios graduales");
+      else if (ins < -0.5) partes.push("y en instituciones eres más favorable a reformas profundas o mayor descentralización");
+      else partes.push("y en instituciones mantienes una posición moderada");
+
+      return "Tu perfil sugiere que " + partes.join(", ") + ".";
+    }
+
+    function explicarPartido(nombre, eco, soc, seg, ins){
+      let razones = [];
+
+      if (["Partido Morado","Somos Perú"].includes(nombre) && soc < -0.5){
+        razones.push("tus respuestas en derechos y valores sociales");
+      }
+      if (["Avanza País","Renovación Popular","Fuerza Popular"].includes(nombre) && eco > 0.8){
+        razones.push("tu inclinación hacia una economía más liberal");
+      }
+      if (["Perú Libre"].includes(nombre) && eco < -0.8){
+        razones.push("tu preferencia por un Estado con mayor peso económico");
+      }
+      if (["Fuerza Popular","Renovación Popular","APP"].includes(nombre) && seg > 0.5){
+        razones.push("tu enfoque más duro en seguridad");
+      }
+      if (["APP","Somos Perú"].includes(nombre) && Math.abs(ins) < 0.8){
+        razones.push("tu posición más moderada en temas institucionales");
+      }
+
+      if (!razones.length){
+        return `Tu mayor coincidencia con ${nombre} parece venir de una combinación general de respuestas, más que de un solo tema dominante.`;
+      }
+
+      return `Tu mayor coincidencia con ${nombre} se explica sobre todo por ${razones.join(" y ")}.`;
+    }
+
+    function strongestAxes(eco, soc, seg, ins){
+      return [
+        {eje:"economía", valor:Math.abs(eco)},
+        {eje:"valores sociales", valor:Math.abs(soc)},
+        {eje:"seguridad", valor:Math.abs(seg)},
+        {eje:"instituciones", valor:Math.abs(ins)}
+      ].sort((a,b)=>b.valor-a.valor);
+    }
+
+    function explicarFortalezas(top1, eco, soc, seg, ins){
+      const axes = strongestAxes(eco, soc, seg, ins);
+      return `Tus respuestas aparecen más definidas en ${axes[0].eje} y ${axes[1].eje}, y esos temas influyen bastante en tu cercanía con ${top1}.`;
+    }
+
+    function explicarDiferencias(top1, eco, soc, seg, ins){
+      const weakest = strongestAxes(eco, soc, seg, ins).sort((a,b)=>a.valor-b.valor)[0];
+      return `Aun así, este resultado no implica coincidencia total: el eje donde tu perfil se ve menos definido es ${weakest.eje}, así que ahí pueden existir diferencias importantes con ${top1}.`;
+    }
+
+    function logoHTML(src, fallback){
+      return `
+        <div class="logo-wrap">
+          <img src="${src}" alt="${fallback}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <div class="logo-fallback" style="display:none">${fallback}</div>
+        </div>
+      `;
+    }
+
+    function mostrarResultado(){
+      sortedResults = Object.entries(score).sort((a,b)=>b[1]-a[1]);
+
+      const bestName = sortedResults[0][0];
+      const bestData = partidos[bestName];
+      const bestPct = Math.round(sortedResults[0][1] / 40 * 100);
+      const tendencia = profileLabel(ecoScore, socScore);
+
+      topMatch.innerHTML = `
+        <div class="top-card">
+          ${logoHTML(bestData.logo, bestData.fallback)}
+          <div>
+            <div class="party-name">${bestName}</div>
+            <div class="candidate">${bestData.candidato}</div>
+            <div class="score">${bestPct}% de coincidencia</div>
+          </div>
+        </div>
+      `;
+
+      tend.innerText = "Tendencia: " + tendencia;
+
+      pills.innerHTML = `
+        <span class="pill">Economía ${ecoScore > 0 ? "liberal" : "estatista"}</span>
+        <span class="pill">Valores ${socScore < 0 ? "progresista" : "conservador"}</span>
+        <span class="pill">Seguridad ${segScore > 0 ? "mano dura" : "preventivo"}</span>
+        <span class="pill">Instituciones ${insScore > 0 ? "gradual" : "reformista"}</span>
+      `;
+
+      perfilExplicacion.innerText = perfilHumano(ecoScore, socScore, segScore, insScore);
+      partidoExplicacion.innerText = explicarPartido(bestName, ecoScore, socScore, segScore, insScore);
+      fortalezasExplicacion.innerText = explicarFortalezas(bestName, ecoScore, socScore, segScore, insScore);
+      diferenciasExplicacion.innerText = explicarDiferencias(bestName, ecoScore, socScore, segScore, insScore);
+
+      let topHTML = "";
+      sortedResults.slice(0,3).forEach(([name, points], idx) => {
+        const pct = Math.round(points / 40 * 100);
+        const data = partidos[name];
+        topHTML += `
+          <div class="top-card">
+            ${logoHTML(data.logo, data.fallback)}
+            <div>
+              <div class="party-name">#${idx + 1} ${name}</div>
+              <div class="candidate">${data.candidato}</div>
+              <div class="score">${pct}% de coincidencia</div>
+            </div>
+          </div>
+        `;
+      });
+      top3.innerHTML = topHTML;
+
+      let listHTML = "";
+      sortedResults.forEach(([name, points]) => {
+        const pct = Math.round(points / 40 * 100);
+        const data = partidos[name];
+        listHTML += `
+          <div style="margin-bottom:12px">
+            <div class="small" style="margin-bottom:4px"><b style="color:var(--text)">${name}</b> · ${data.candidato} · ${pct}%</div>
+            <div class="bar"><div class="fill" style="width:${pct}%"></div></div>
+          </div>
+        `;
+      });
+      lista.innerHTML = listHTML;
+
+      eco.style.width = Math.max(0, Math.min(100, (ecoScore + 8) / 16 * 100)) + "%";
+      soc.style.width = Math.max(0, Math.min(100, (socScore + 4) / 8 * 100)) + "%";
+      seg.style.width = Math.max(0, Math.min(100, (segScore + 4) / 8 * 100)) + "%";
+      ins.style.width = Math.max(0, Math.min(100, (insScore + 4) / 8 * 100)) + "%";
+    }
+
+    function buildShareText(){
+      if (!sortedResults.length) return location.href;
+      const top1 = sortedResults[0][0];
+      const pct = Math.round(sortedResults[0][1] / 40 * 100);
+      return `Mi resultado en VotoMatch Perú 2026: mayor coincidencia con ${top1} (${pct}%). ${location.href}`;
+    }
+
+    async function shareResult(){
+      const text = buildShareText();
+      if (navigator.share){
+        try{
+          await navigator.share({
+            title:"VotoMatch Perú 2026",
+            text
+          });
+        } catch(e){}
+      } else {
+        navigator.clipboard.writeText(text);
+        alert("Resultado copiado");
+      }
+    }
+
+    function copyLink(){
+      navigator.clipboard.writeText(location.href);
+      alert("Link copiado");
+    }
+
+    function toggleMode(){
+      document.body.classList.toggle("dark");
+      localStorage.setItem("vm_theme", document.body.classList.contains("dark") ? "dark" : "light");
+    }
+
+    function initTheme(){
+      const saved = localStorage.getItem("vm_theme");
+      if (saved === "dark") document.body.classList.add("dark");
+    }
+
+    function initVisits(){
+      let v = Number(localStorage.getItem("vm_visits") || "0");
+      v += 1;
+      localStorage.setItem("vm_visits", String(v));
+      visits.innerText = v;
+    }
+
+    initTheme();
+    initVisits();
+  </script>
 </body>
 </html>
