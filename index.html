@@ -1,573 +1,537 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VotoMatch Perú 2026</title>
+  <meta name="description" content="Descubre con qué partido político coincides más en las elecciones 2026 del Perú." />
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --primary:#4361ee;
+      --success:#22c55e;
+      --soft:#eef2ff;
+      --top:#ecfdf5;
+      --border:#dbe1ea;
+    }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    body.dark{
+      --bg:#0f172a;
+      --card:#111827;
+      --text:#f8fafc;
+      --muted:#94a3b8;
+      --soft:#1e293b;
+      --top:#052e1b;
+      --border:#334155;
+    }
 
-<title>VotoMatch Perú 2026</title>
+    *{box-sizing:border-box}
 
-<style>
+    body{
+      margin:0;
+      padding:20px;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
 
-:root{
---bg:#f5f7fb;
---card:#ffffff;
---text:#0f172a;
---muted:#64748b;
---primary:#4361ee;
---success:#22c55e;
---soft:#eef2ff;
---top:#ecfdf5;
-}
+    .card{
+      max-width:720px;
+      margin:0 auto 20px auto;
+      background:var(--card);
+      padding:28px;
+      border-radius:20px;
+      box-shadow:0 10px 25px rgba(0,0,0,.06);
+    }
 
-body.dark{
---bg:#0f172a;
---card:#111827;
---text:#f8fafc;
---muted:#94a3b8;
---soft:#1e293b;
---top:#052e1b;
-}
+    .header{
+      text-align:center;
+      font-weight:900;
+      font-size:32px;
+      margin-bottom:20px;
+    }
 
-body{
-margin:0;
-padding:20px;
-font-family:system-ui;
-background:var(--bg);
-color:var(--text);
-}
+    .topbar{
+      display:flex;
+      justify-content:flex-end;
+      margin-bottom:10px;
+    }
 
-.card{
-max-width:720px;
-margin:auto;
-background:var(--card);
-padding:28px;
-border-radius:20px;
-margin-bottom:20px;
-}
+    h1,h2,h3,p{margin-top:0}
+    h1{font-size:34px; line-height:1.1}
+    h2{font-size:28px}
+    h3{font-size:20px}
 
-.header{
-text-align:center;
-font-weight:900;
-font-size:34px;
-margin-bottom:20px;
-}
+    .muted{
+      color:var(--muted);
+      font-size:14px;
+    }
 
-.progress{
-height:10px;
-background:var(--soft);
-border-radius:10px;
-overflow:hidden;
-margin:20px 0;
-}
+    .counter{
+      text-align:center;
+      color:var(--muted);
+      margin-bottom:14px;
+      font-size:14px;
+    }
 
-.progress div{
-height:10px;
-background:var(--primary);
-width:0%;
-}
+    .progress{
+      height:10px;
+      background:var(--soft);
+      border-radius:999px;
+      overflow:hidden;
+      margin:18px 0;
+    }
 
-button{
-width:100%;
-padding:15px;
-margin-top:10px;
-border-radius:12px;
-border:1px solid #ddd;
-font-size:16px;
-cursor:pointer;
-}
+    .progress > div{
+      height:100%;
+      width:0%;
+      background:var(--primary);
+      transition:width .2s ease;
+    }
 
-.primary{
-background:var(--primary);
-color:white;
-border:none;
-}
+    .question{
+      font-size:28px;
+      line-height:1.25;
+      margin-bottom:16px;
+    }
 
-.party{
-display:flex;
-gap:14px;
-align-items:center;
-background:var(--top);
-padding:14px;
-border-radius:14px;
-margin-bottom:12px;
-}
+    button{
+      width:100%;
+      padding:15px;
+      margin-top:10px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      font-size:16px;
+      cursor:pointer;
+      background:#f8fafc;
+      color:var(--text);
+    }
 
-.logo{
-width:48px;
-height:48px;
-object-fit:contain;
-}
+    body.dark button{
+      background:#182233;
+      color:var(--text);
+    }
 
-.score{
-color:var(--success);
-font-weight:700;
-}
+    .primary{
+      background:var(--primary);
+      color:#fff;
+      border:none;
+    }
 
-.bar{
-height:10px;
-background:var(--soft);
-border-radius:10px;
-margin:6px 0 16px;
-overflow:hidden;
-}
+    .selected{
+      background:var(--primary) !important;
+      color:#fff !important;
+      border-color:var(--primary) !important;
+    }
 
-.fill{
-height:10px;
-background:var(--success);
-}
+    .tu-decides{
+      margin-top:28px;
+      font-size:30px;
+      font-weight:900;
+      letter-spacing:10px;
+      text-align:center;
+      opacity:.22;
+    }
 
-.note{
-background:var(--soft);
-padding:16px;
-border-radius:12px;
-margin-top:16px;
-}
+    .party{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      background:var(--top);
+      padding:14px;
+      border-radius:14px;
+      margin-bottom:12px;
+    }
 
-.tu-decides{
-margin-top:30px;
-font-weight:900;
-letter-spacing:10px;
-text-align:center;
-opacity:.25;
-font-size:34px;
-}
+    .logo-box{
+      width:52px;
+      height:52px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      flex-shrink:0;
+    }
 
-.counter{
-font-size:14px;
-color:var(--muted);
-text-align:center;
-margin-top:10px;
-}
+    .logo-box img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+      padding:4px;
+    }
 
-</style>
+    .logo-fallback{
+      font-weight:800;
+      font-size:14px;
+      color:#111827;
+    }
 
+    .score{
+      color:var(--success);
+      font-weight:700;
+    }
+
+    .bar{
+      height:10px;
+      background:var(--soft);
+      border-radius:999px;
+      margin:6px 0 16px;
+      overflow:hidden;
+    }
+
+    .fill{
+      height:100%;
+      background:var(--success);
+    }
+
+    .note{
+      background:var(--soft);
+      padding:16px;
+      border-radius:12px;
+      margin-top:16px;
+    }
+
+    .pill{
+      display:inline-block;
+      background:var(--soft);
+      padding:6px 10px;
+      border-radius:999px;
+      margin:4px 6px 4px 0;
+      font-size:13px;
+    }
+
+    .section-title{
+      margin-top:20px;
+      margin-bottom:10px;
+      font-size:24px;
+      font-weight:800;
+    }
+
+    @media (max-width:640px){
+      body{padding:14px}
+      .card{padding:20px}
+      .header{font-size:28px}
+      .question{font-size:24px}
+      .tu-decides{font-size:24px;letter-spacing:7px}
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="card" id="intro">
-
-<div style="text-align:right">
-<button onclick="toggleMode()">🌙</button>
-</div>
-
-<div class="header">
-🇵🇪 ELECCIONES 2026
-</div>
-
-<h1>¿Con qué partido coincides más?</h1>
-
-<div class="counter">
-Personas que hicieron el test:
-<b id="contador">...</b>
-</div>
-
-<button class="primary" onclick="start()">
-Empezar
-</button>
-
-</div>
-
-
-
-<div class="card" id="quiz" style="display:none">
-
-<button onclick="prev()">← Anterior</button>
-
-<h3 id="counter"></h3>
-
-<div class="progress">
-<div id="bar"></div>
-</div>
-
-<h2 id="q"></h2>
-
-<button onclick="answer(2)">De acuerdo</button>
-<button onclick="answer(1)">Neutral</button>
-<button onclick="answer(0)">En desacuerdo</button>
-
-<div class="tu-decides">
-TÚ DECIDES
-</div>
-
-</div>
-
-
-
-<div class="card" id="result" style="display:none">
-
-<h2>Tu resultado</h2>
-
-<div id="winner"></div>
-
-<div class="note">
-
-<h3>Explicación</h3>
-
-<p id="exp"></p>
-
-</div>
-
-<h3>Top 3 coincidencias</h3>
-
-<div id="top3"></div>
-
-<h3>Todos los partidos</h3>
-
-<div id="list"></div>
-
-<button onclick="shareWhatsApp()">
-Compartir en WhatsApp
-</button>
-
-<button onclick="location.reload()">
-Reiniciar
-</button>
-
-</div>
-
-
-
-<script>
-
-const preguntas=[
-
-"El Estado debería reducir el déficit fiscal.",
-"Aumentar impuestos a minería.",
-"Petroperú debe seguir estatal.",
-"Más tratados de libre comercio.",
-"Flexibilidad laboral.",
-"Aumentar salario mínimo.",
-"Mayor rol del Estado.",
-"Menos impuestos a MYPES.",
-"FFAA apoyo seguridad.",
-"Endurecer penas.",
-"Prevención social del delito.",
-"Más presupuesto policía.",
-"Reforma constitucional.",
-"Reelección congresal.",
-"Más requisitos partidos.",
-"Más autonomía regiones.",
-"Más programas sociales.",
-"Educación sexual.",
-"Unión civil.",
-"Prohibir minería cabeceras."
-
-];
-
-
-const partidos={
-
-"Fuerza Popular":{
-logo:"https://upload.wikimedia.org/wikipedia/commons/3/34/Fuerza_Popular_logo.png",
-candidato:"Keiko Fujimori",
-vector:[2,1,2,2,2,1,1,1,2,2,0,2,0,2,2,1,1,0,0,0]
-},
-
-"Renovación Popular":{
-logo:"https://upload.wikimedia.org/wikipedia/commons/6/6a/Renovacion_Popular_logo.png",
-candidato:"Rafael López Aliaga",
-vector:[2,0,2,2,2,0,0,1,2,2,0,2,0,2,2,0,0,0,0,0]
-},
-
-"APP":{
-logo:"https://upload.wikimedia.org/wikipedia/commons/0/06/Alianza_para_el_Progreso_logo.png",
-candidato:"César Acuña",
-vector:[1,1,2,2,1,2,1,2,2,2,1,2,1,1,2,2,2,1,1,1]
-},
-
-"Perú Libre":{
-logo:"https://upload.wikimedia.org/wikipedia/commons/0/0f/Peru_Libre_logo.png",
-candidato:"Vladimir Cerrón",
-vector:[0,2,2,0,0,2,2,1,2,2,1,2,2,0,1,2,2,1,0,1]
-},
-
-"Juntos por el Perú":{
-logo:"https://upload.wikimedia.org/wikipedia/commons/6/6f/Juntos_por_el_Peru_logo.png",
-candidato:"Roberto Sánchez",
-vector:[0,2,2,1,0,2,2,2,0,1,2,1,1,1,1,2,2,2,2,2]
-},
-
-"Somos Perú":{
-logo:"https://upload.wikimedia.org/wikipedia/commons/4/42/Somos_Peru_logo.png",
-candidato:"George Forsyth",
-vector:[1,1,1,2,1,2,1,2,1,2,2,2,1,1,2,2,2,2,2,1]
-},
-
-"Partido Morado":{
-logo:"https://upload.wikimedia.org/wikipedia/commons/5/57/Partido_Morado_logo.png",
-candidato:"Mesías Guevara",
-vector:[1,2,1,2,1,2,1,2,1,1,2,1,1,2,2,2,2,2,2,1]
-},
-
-"País para Todos":{
-logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Default_Logo.svg/200px-Default_Logo.svg.png",
-candidato:"Carlos Álvarez",
-vector:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-},
-
-"Obras":{
-logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Default_Logo.svg/200px-Default_Logo.svg.png",
-candidato:"Ricardo Belmont",
-vector:[1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-}
-
-};
-
-
-let i=0;
-let respuestas=[];
-
-
-
-async function contadorGlobal(){
-
-try{
-
-let r=
-await fetch("https://api.countapi.xyz/hit/votomatch2026/visitas");
-
-let data=
-await r.json();
-
-document.getElementById("contador").innerText=
-data.value;
-
-}catch{
-
-document.getElementById("contador").innerText=
-"1000+";
-
-}
-
-}
-
-contadorGlobal();
-
-
-
-function start(){
-
-intro.style.display="none";
-
-quiz.style.display="block";
-
-show();
-
-}
-
-
-function show(){
-
-counter.innerText=
-"Pregunta "+(i+1)+" de 20";
-
-q.innerText=
-preguntas[i];
-
-bar.style.width=
-(i/20*100)+"%";
-
-}
-
-
-function answer(v){
-
-respuestas[i]=v;
-
-if(i<19){
-
-i++;
-
-show();
-
-}else{
-
-calc();
-
-}
-
-}
-
-
-function prev(){
-
-if(i>0){
-
-i--;
-
-show();
-
-}
-
-}
-
-
-function calc(){
-
-quiz.style.display="none";
-
-result.style.display="block";
-
-let results=[];
-
-for(let p in partidos){
-
-let score=0;
-
-for(let j=0;j<20;j++){
-
-score+=2-Math.abs(
-respuestas[j]-partidos[p].vector[j]
-);
-
-}
-
-results.push({
-
-name:p,
-
-score:Math.round(score/40*100),
-
-logo:partidos[p].logo,
-
-candidato:partidos[p].candidato
-
-});
-
-}
-
-
-results.sort((a,b)=>b.score-a.score);
-
-
-
-winner.innerHTML=
-
-`
-<div class="party">
-
-<img class="logo" src="${results[0].logo}">
-
-<div>
-
-<b>${results[0].name}</b>
-
-<br>
-
-${results[0].candidato}
-
-<br>
-
-<span class="score">
-
-${results[0].score}% coincidencia
-
-</span>
-
-</div>
-
-</div>
-`;
-
-
-exp.innerText=
-"Tu perfil muestra afinidad ideológica con este partido considerando rol del Estado, economía y políticas sociales.";
-
-
-
-let topHTML="";
-
-results.slice(0,3).forEach(r=>{
-
-topHTML+=`
-
-<div class="party">
-
-<img class="logo" src="${r.logo}">
-
-<div>
-
-<b>${r.name}</b>
-
-<br>
-
-${r.candidato}
-
-<br>
-
-<span class="score">
-
-${r.score}%
-
-</span>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-
-top3.innerHTML=topHTML;
-
-
-
-let listHTML="";
-
-results.forEach(r=>{
-
-listHTML+=`
-
-${r.name} ${r.score}%
-
-<div class="bar">
-
-<div class="fill"
-
-style="width:${r.score}%">
-
-</div>
-
-</div>
-
-`;
-
-});
-
-list.innerHTML=listHTML;
-
-}
-
-
-
-function shareWhatsApp(){
-
-let texto=
-
-"Descubre con qué partido coincides en Elecciones 2026 🇵🇪 "+location.href;
-
-window.open(
-
-"https://wa.me/?text="+encodeURIComponent(texto)
-
-);
-
-}
-
-
-
-function toggleMode(){
-
-document.body.classList.toggle("dark");
-
-}
-
-</script>
-
+  <div class="card" id="intro">
+    <div class="topbar">
+      <button type="button" onclick="toggleMode()" style="width:auto">🌙 / ☀️</button>
+    </div>
+
+    <div class="header">🇵🇪 ELECCIONES 2026</div>
+    <h1>¿Con qué partido coincides más?</h1>
+    <div class="counter">Personas que hicieron el test: <b id="contador">...</b></div>
+    <button class="primary" type="button" onclick="startQuiz()">Empezar</button>
+  </div>
+
+  <div class="card" id="quiz" style="display:none">
+    <button type="button" onclick="prevQuestion()">← Anterior</button>
+    <h3 id="counterPregunta"></h3>
+
+    <div class="progress">
+      <div id="barraProgreso"></div>
+    </div>
+
+    <div class="question" id="textoPregunta"></div>
+
+    <button id="btn2" type="button" onclick="selectAnswer(2)">De acuerdo</button>
+    <button id="btn1" type="button" onclick="selectAnswer(1)">Neutral</button>
+    <button id="btn0" type="button" onclick="selectAnswer(0)">En desacuerdo</button>
+
+    <div class="tu-decides">TÚ DECIDES</div>
+  </div>
+
+  <div class="card" id="result" style="display:none">
+    <div class="header">🇵🇪 ELECCIONES 2026</div>
+    <h2>Tu resultado</h2>
+
+    <div id="winner"></div>
+
+    <div id="pills"></div>
+
+    <div class="note">
+      <h3>Explicación</h3>
+      <p id="exp"></p>
+    </div>
+
+    <div class="section-title">Top 3 coincidencias</div>
+    <div id="top3"></div>
+
+    <div class="section-title">Todos los partidos</div>
+    <div id="list"></div>
+
+    <button type="button" onclick="shareWhatsApp()">Compartir en WhatsApp</button>
+    <button type="button" onclick="location.reload()">Reiniciar</button>
+  </div>
+
+  <script>
+    const preguntas = [
+      "El Estado debería reducir el déficit fiscal.",
+      "Deberían aumentarse los impuestos a la minería.",
+      "Petroperú debería seguir siendo una empresa estatal.",
+      "Perú debería firmar más tratados de libre comercio.",
+      "Las empresas deberían tener mayor flexibilidad laboral.",
+      "El salario mínimo debería aumentar.",
+      "El Estado debería tener mayor participación en la economía.",
+      "Las MYPES deberían pagar menos impuestos.",
+      "Las Fuerzas Armadas deberían apoyar en seguridad ciudadana.",
+      "Las penas por delitos graves deberían endurecerse.",
+      "La prevención social del delito debería ser prioritaria.",
+      "El presupuesto de la policía debería aumentar.",
+      "Se necesita una reforma constitucional.",
+      "Debe permitirse la reelección de congresistas.",
+      "Debería ser más difícil crear partidos políticos.",
+      "Las regiones deberían tener más autonomía.",
+      "Deberían ampliarse los programas sociales.",
+      "La educación sexual debería enseñarse en colegios.",
+      "Debe reconocerse la unión civil.",
+      "Debe prohibirse la minería en cabeceras de cuenca."
+    ];
+
+    const partidos = {
+      "Fuerza Popular":{
+        logo:"https://upload.wikimedia.org/wikipedia/commons/3/34/Fuerza_Popular_logo.png",
+        candidato:"Keiko Fujimori",
+        fallback:"FP",
+        vector:[2,1,2,2,2,1,1,1,2,2,0,2,0,2,2,1,1,0,0,0]
+      },
+      "Renovación Popular":{
+        logo:"https://upload.wikimedia.org/wikipedia/commons/6/6a/Renovacion_Popular_logo.png",
+        candidato:"Rafael López Aliaga",
+        fallback:"RP",
+        vector:[2,0,2,2,2,0,0,1,2,2,0,2,0,2,2,0,0,0,0,0]
+      },
+      "APP":{
+        logo:"https://upload.wikimedia.org/wikipedia/commons/0/06/Alianza_para_el_Progreso_logo.png",
+        candidato:"César Acuña",
+        fallback:"APP",
+        vector:[1,1,2,2,1,2,1,2,2,2,1,2,1,1,2,2,2,1,1,1]
+      },
+      "Perú Libre":{
+        logo:"https://upload.wikimedia.org/wikipedia/commons/0/0f/Peru_Libre_logo.png",
+        candidato:"Vladimir Cerrón",
+        fallback:"PL",
+        vector:[0,2,2,0,0,2,2,1,2,2,1,2,2,0,1,2,2,1,0,1]
+      },
+      "Juntos por el Perú":{
+        logo:"https://upload.wikimedia.org/wikipedia/commons/6/6f/Juntos_por_el_Peru_logo.png",
+        candidato:"Roberto Sánchez",
+        fallback:"JPP",
+        vector:[0,2,2,1,0,2,2,2,0,1,2,1,1,1,1,2,2,2,2,2]
+      },
+      "Somos Perú":{
+        logo:"https://upload.wikimedia.org/wikipedia/commons/4/42/Somos_Peru_logo.png",
+        candidato:"George Forsyth",
+        fallback:"SP",
+        vector:[1,1,1,2,1,2,1,2,1,2,2,2,1,1,2,2,2,2,2,1]
+      },
+      "Partido Morado":{
+        logo:"https://upload.wikimedia.org/wikipedia/commons/5/57/Partido_Morado_logo.png",
+        candidato:"Mesías Guevara",
+        fallback:"PM",
+        vector:[1,2,1,2,1,2,1,2,1,1,2,1,1,2,2,2,2,2,2,1]
+      },
+      "País para Todos":{
+        logo:"",
+        candidato:"Carlos Álvarez",
+        fallback:"PPT",
+        vector:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+      },
+      "Obras":{
+        logo:"",
+        candidato:"Ricardo Belmont",
+        fallback:"OBR",
+        vector:[1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+      },
+      "Ahora Nación":{
+        logo:"",
+        candidato:"Alfonso López Chau",
+        fallback:"AN",
+        vector:[1,2,1,1,1,2,1,1,1,1,2,1,1,1,1,2,2,2,2,1]
+      },
+      "Cooperación Popular":{
+        logo:"",
+        candidato:"Yonhy Lescano",
+        fallback:"CP",
+        vector:[1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,2,2,1,1,1]
+      },
+      "Frente de la Esperanza":{
+        logo:"",
+        candidato:"Fernando Olivera",
+        fallback:"FDE",
+        vector:[1,1,1,2,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+      },
+      "Voces del Pueblo":{
+        logo:"",
+        candidato:"Guillermo Bermejo",
+        fallback:"VP",
+        vector:[0,2,2,0,0,2,2,1,2,2,2,2,2,0,1,2,2,2,1,1]
+      }
+    };
+
+    let indice = 0;
+    let respuestas = [];
+
+    function $(id){
+      return document.getElementById(id);
+    }
+
+    async function contadorGlobal(){
+      try{
+        const r = await fetch("https://api.countapi.xyz/hit/votomatch2026/visitas");
+        const data = await r.json();
+        $("contador").textContent = data.value;
+      }catch(e){
+        $("contador").textContent = "1000+";
+      }
+    }
+
+    function toggleMode(){
+      document.body.classList.toggle("dark");
+    }
+
+    function startQuiz(){
+      $("intro").style.display = "none";
+      $("quiz").style.display = "block";
+      renderPregunta();
+    }
+
+    function renderPregunta(){
+      $("counterPregunta").textContent = `Pregunta ${indice + 1} de ${preguntas.length}`;
+      $("textoPregunta").textContent = preguntas[indice];
+      $("barraProgreso").style.width = `${(indice / preguntas.length) * 100}%`;
+
+      $("btn0").classList.remove("selected");
+      $("btn1").classList.remove("selected");
+      $("btn2").classList.remove("selected");
+
+      if (respuestas[indice] === 0) $("btn0").classList.add("selected");
+      if (respuestas[indice] === 1) $("btn1").classList.add("selected");
+      if (respuestas[indice] === 2) $("btn2").classList.add("selected");
+    }
+
+    function selectAnswer(valor){
+      respuestas[indice] = valor;
+      if (indice < preguntas.length - 1){
+        indice++;
+        renderPregunta();
+      } else {
+        calcularResultado();
+      }
+    }
+
+    function prevQuestion(){
+      if (indice > 0){
+        indice--;
+        renderPregunta();
+      }
+    }
+
+    function logoHtml(partido){
+      if (partido.logo){
+        return `
+          <div class="logo-box">
+            <img src="${partido.logo}" alt="${partido.fallback}" onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=&quot;logo-fallback&quot;>${partido.fallback}</div>';">
+          </div>
+        `;
+      }
+      return `<div class="logo-box"><div class="logo-fallback">${partido.fallback}</div></div>`;
+    }
+
+    function explicarResultado(nombre, score){
+      if (score >= 80) return `Tus respuestas muestran una coincidencia muy alta con ${nombre}. Compartes una visión política bastante cercana en temas clave como economía, Estado y agenda social.`;
+      if (score >= 70) return `Tus respuestas muestran una coincidencia fuerte con ${nombre}. Hay bastante cercanía ideológica, aunque no necesariamente acuerdo total en todos los temas.`;
+      if (score >= 60) return `Tus respuestas muestran una coincidencia moderada con ${nombre}. Compartes varias posiciones importantes, pero también existen diferencias relevantes.`;
+      return `Tus respuestas muestran una coincidencia parcial con ${nombre}. Hay algunos puntos en común, pero tu perfil no se alinea claramente con una sola opción.`;
+    }
+
+    function calcularResultado(){
+      $("quiz").style.display = "none";
+      $("result").style.display = "block";
+
+      const resultados = [];
+
+      for (const nombre in partidos){
+        const partido = partidos[nombre];
+        let puntos = 0;
+
+        for (let j = 0; j < preguntas.length; j++){
+          const user = respuestas[j] ?? 1;
+          puntos += 2 - Math.abs(user - partido.vector[j]);
+        }
+
+        resultados.push({
+          name:nombre,
+          score:Math.round((puntos / (preguntas.length * 2)) * 100),
+          logo:partido.logo,
+          candidato:partido.candidato,
+          fallback:partido.fallback
+        });
+      }
+
+      resultados.sort((a,b) => b.score - a.score);
+
+      const ganador = resultados[0];
+      const ganadorData = partidos[ganador.name];
+
+      $("winner").innerHTML = `
+        <div class="party">
+          ${logoHtml(ganadorData)}
+          <div>
+            <b>${ganador.name}</b><br>
+            ${ganador.candidato}<br>
+            <span class="score">${ganador.score}% coincidencia</span>
+          </div>
+        </div>
+      `;
+
+      $("pills").innerHTML = `
+        <span class="pill">Resultado inmediato</span>
+        <span class="pill">Top ${resultados.length} partidos</span>
+      `;
+
+      $("exp").textContent = explicarResultado(ganador.name, ganador.score);
+
+      $("top3").innerHTML = resultados.slice(0,3).map(r => {
+        const p = partidos[r.name];
+        return `
+          <div class="party">
+            ${logoHtml(p)}
+            <div>
+              <b>#${resultados.indexOf(r)+1} ${r.name}</b><br>
+              ${r.candidato}<br>
+              <span class="score">${r.score}%</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      $("list").innerHTML = resultados.map(r => `
+        <div>
+          <div>${r.name} ${r.score}%</div>
+          <div class="bar"><div class="fill" style="width:${r.score}%"></div></div>
+        </div>
+      `).join("");
+    }
+
+    function shareWhatsApp(){
+      const texto = `Descubre con qué partido coincides en Elecciones 2026 🇵🇪 ${location.href}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, "_blank");
+    }
+
+    contadorGlobal();
+  </script>
 </body>
 </html>
