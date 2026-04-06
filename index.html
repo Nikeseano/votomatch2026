@@ -237,8 +237,9 @@
     .logo-wrap img{
       width:100%;
       height:100%;
-      object-fit:cover;
+      object-fit:contain;
       display:block;
+      padding:4px;
     }
 
     .logo-fallback{
@@ -266,6 +267,19 @@
       font-weight:700;
       color:var(--success);
       font-size:15px;
+    }
+
+    .jne-link{
+      display:inline-block;
+      margin-top:8px;
+      font-size:13px;
+      font-weight:700;
+      color:var(--primary);
+      text-decoration:none;
+    }
+
+    .jne-link:hover{
+      text-decoration:underline;
     }
 
     .bar{
@@ -425,7 +439,7 @@
     </div>
 
     <p class="small" style="margin-top:16px">
-      Candidaturas mostradas como “Por confirmar (JNE)” cuando no hay confirmación oficial cargada en esta herramienta.
+      Candidatos presidenciales verificados en Voto Informado del JNE para los partidos incluidos aquí.  [oai_citation:1‡Voto Informado](https://votoinformado.jne.gob.pe/formula-presidencial/1366?utm_source=chatgpt.com)
     </p>
   </div>
 
@@ -457,43 +471,50 @@
       "Fuerza Popular":{
         respuestas:[2,1,2,2,2,1,1,1,2,2,0,2,0,2,2,1,1,0,0,0],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Fuerza_Popular_logo.png/200px-Fuerza_Popular_logo.png",
-        candidato:"Por confirmar (JNE)",
+        candidato:"Keiko Sofía Fujimori Higuchi",
+        jne:"https://votoinformado.jne.gob.pe/formula-presidencial/1366",
         fallback:"FP"
       },
       "APP":{
         respuestas:[1,1,2,2,1,2,1,2,2,2,1,2,1,1,2,2,2,1,1,1],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Alianza_para_el_Progreso_logo.png/200px-Alianza_para_el_Progreso_logo.png",
-        candidato:"Por confirmar (JNE)",
+        candidato:"César Acuña Peralta",
+        jne:"https://votoinformado.jne.gob.pe/formula-presidencial/1257",
         fallback:"APP"
       },
       "Avanza País":{
         respuestas:[2,0,0,2,2,0,0,2,2,2,0,2,0,2,2,0,0,1,1,0],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Avanza_Pais_logo.png/200px-Avanza_Pais_logo.png",
-        candidato:"Por confirmar (JNE)",
+        candidato:"José Daniel Williams Zapata",
+        jne:"https://votoinformado.jne.gob.pe/formula-presidencial/2173",
         fallback:"AP"
       },
       "Partido Morado":{
         respuestas:[1,2,1,2,1,2,1,2,1,1,2,1,1,2,2,2,2,2,2,1],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Partido_Morado_logo.png/200px-Partido_Morado_logo.png",
-        candidato:"Por confirmar (JNE)",
+        candidato:"Mesías Antonio Guevara Amasifuén",
+        jne:"https://votoinformado.jne.gob.pe/formula-presidencial/2840",
         fallback:"PM"
       },
       "Perú Libre":{
         respuestas:[0,2,2,0,0,2,2,1,2,2,1,2,2,0,1,2,2,1,0,1],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Peru_Libre_logo.png/200px-Peru_Libre_logo.png",
-        candidato:"Por confirmar (JNE)",
+        candidato:"Vladimir Roy Cerrón Rojas",
+        jne:"https://votoinformado.jne.gob.pe/formula-presidencial/2218",
         fallback:"PL"
       },
       "Renovación Popular":{
         respuestas:[2,0,2,2,2,0,0,1,2,2,0,2,0,2,2,0,0,0,0,0],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Renovacion_Popular_logo.png/200px-Renovacion_Popular_logo.png",
-        candidato:"Por confirmar (JNE)",
+        candidato:"Rafael Bernardo López Aliaga Cazorla",
+        jne:"https://votoinformado.jne.gob.pe/formula-presidencial/22",
         fallback:"RP"
       },
       "Somos Perú":{
         respuestas:[1,1,1,2,1,2,1,2,1,2,2,2,1,1,2,2,2,2,2,1],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Somos_Peru_logo.png/200px-Somos_Peru_logo.png",
-        candidato:"Por confirmar (JNE)",
+        candidato:"George Patrick Forsyth Sommer",
+        jne:"https://votoinformado.jne.gob.pe/formula-presidencial/14",
         fallback:"SP"
       }
     };
@@ -671,8 +692,9 @@
           ${logoHTML(bestData.logo, bestData.fallback)}
           <div>
             <div class="party-name">${bestName}</div>
-            <div class="candidate">Candidatura: ${bestData.candidato}</div>
+            <div class="candidate">Candidato presidencial: ${bestData.candidato}</div>
             <div class="score">${bestPct}% de coincidencia</div>
+            <a class="jne-link" href="${bestData.jne}" target="_blank" rel="noopener noreferrer">Ver ficha oficial JNE</a>
           </div>
         </div>
       `;
@@ -700,8 +722,9 @@
             ${logoHTML(data.logo, data.fallback)}
             <div>
               <div class="party-name">#${idx + 1} ${name}</div>
-              <div class="candidate">Candidatura: ${data.candidato}</div>
+              <div class="candidate">Candidato presidencial: ${data.candidato}</div>
               <div class="score">${pct}% de coincidencia</div>
+              <a class="jne-link" href="${data.jne}" target="_blank" rel="noopener noreferrer">Ver ficha oficial JNE</a>
             </div>
           </div>
         `;
