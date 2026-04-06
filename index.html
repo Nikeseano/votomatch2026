@@ -76,12 +76,12 @@
       cursor:pointer;
     }
 
-    .eyebrow{
-      font-size:14px;
-      font-weight:700;
-      letter-spacing:.04em;
-      color:var(--muted);
-      margin-bottom:10px;
+    .header-elecciones{
+      font-size:28px;
+      font-weight:900;
+      text-align:center;
+      margin-bottom:16px;
+      letter-spacing:1px;
     }
 
     .sub{
@@ -181,13 +181,13 @@
       border-color:var(--primary);
     }
 
-    .logo-box{
+    .tu-decides{
+      margin-top:30px;
+      font-size:30px;
+      font-weight:900;
+      letter-spacing:12px;
       text-align:center;
-      margin-top:28px;
-      font-size:20px;
-      font-weight:800;
-      letter-spacing:8px;
-      opacity:.35;
+      opacity:.25;
     }
 
     .note{
@@ -317,6 +317,8 @@
       .quiz-top{flex-wrap:wrap}
       .quiz-top button{min-width:100%}
       .actions{grid-template-columns:1fr}
+      .header-elecciones{font-size:24px}
+      .tu-decides{font-size:24px; letter-spacing:8px}
     }
   </style>
 </head>
@@ -327,7 +329,7 @@
       <button onclick="toggleMode()">🌙 / ☀️</button>
     </div>
 
-    <div class="eyebrow">🇵🇪 Elecciones 2026</div>
+    <div class="header-elecciones">🇵🇪 ELECCIONES 2026</div>
     <h1>¿Con qué partido coincides más?</h1>
     <p class="sub">
       Responde 20 preguntas y compara tus respuestas con una matriz referencial de partidos políticos peruanos.
@@ -353,7 +355,7 @@
       <button onclick="toggleMode()">🌙 / ☀️</button>
     </div>
 
-    <div class="eyebrow">🇵🇪 Elecciones 2026</div>
+    <div class="header-elecciones">🇵🇪 ELECCIONES 2026</div>
 
     <div class="quiz-top">
       <button onclick="prev()">← Anterior</button>
@@ -370,7 +372,7 @@
     <button id="b1" class="answer" onclick="ans(1)">Neutral</button>
     <button id="b0" class="answer" onclick="ans(0)">En desacuerdo</button>
 
-    <div class="logo-box">TÚ DECIDES</div>
+    <div class="tu-decides">TÚ DECIDES</div>
   </div>
 
   <div class="card" id="res" style="display:none">
@@ -378,7 +380,7 @@
       <button onclick="toggleMode()">🌙 / ☀️</button>
     </div>
 
-    <div class="eyebrow">🇵🇪 Elecciones 2026</div>
+    <div class="header-elecciones">🇵🇪 ELECCIONES 2026</div>
     <h2>Tu resultado</h2>
 
     <div id="topMatch"></div>
@@ -423,7 +425,7 @@
     </div>
 
     <p class="small" style="margin-top:16px">
-      Resultado orientativo y simplificado.
+      Candidaturas mostradas como “Por confirmar (JNE)” cuando no hay confirmación oficial cargada en esta herramienta.
     </p>
   </div>
 
@@ -455,43 +457,43 @@
       "Fuerza Popular":{
         respuestas:[2,1,2,2,2,1,1,1,2,2,0,2,0,2,2,1,1,0,0,0],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Fuerza_Popular_logo.png/200px-Fuerza_Popular_logo.png",
-        candidato:"Keiko Fujimori",
+        candidato:"Por confirmar (JNE)",
         fallback:"FP"
       },
       "APP":{
         respuestas:[1,1,2,2,1,2,1,2,2,2,1,2,1,1,2,2,2,1,1,1],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Alianza_para_el_Progreso_logo.png/200px-Alianza_para_el_Progreso_logo.png",
-        candidato:"César Acuña",
+        candidato:"Por confirmar (JNE)",
         fallback:"APP"
       },
       "Avanza País":{
         respuestas:[2,0,0,2,2,0,0,2,2,2,0,2,0,2,2,0,0,1,1,0],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Avanza_Pais_logo.png/200px-Avanza_Pais_logo.png",
-        candidato:"Hernando de Soto",
+        candidato:"Por confirmar (JNE)",
         fallback:"AP"
       },
       "Partido Morado":{
         respuestas:[1,2,1,2,1,2,1,2,1,1,2,1,1,2,2,2,2,2,2,1],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Partido_Morado_logo.png/200px-Partido_Morado_logo.png",
-        candidato:"Julio Guzmán",
+        candidato:"Por confirmar (JNE)",
         fallback:"PM"
       },
       "Perú Libre":{
         respuestas:[0,2,2,0,0,2,2,1,2,2,1,2,2,0,1,2,2,1,0,1],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Peru_Libre_logo.png/200px-Peru_Libre_logo.png",
-        candidato:"Vladimir Cerrón",
+        candidato:"Por confirmar (JNE)",
         fallback:"PL"
       },
       "Renovación Popular":{
         respuestas:[2,0,2,2,2,0,0,1,2,2,0,2,0,2,2,0,0,0,0,0],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Renovacion_Popular_logo.png/200px-Renovacion_Popular_logo.png",
-        candidato:"Rafael López Aliaga",
+        candidato:"Por confirmar (JNE)",
         fallback:"RP"
       },
       "Somos Perú":{
         respuestas:[1,1,1,2,1,2,1,2,1,2,2,2,1,1,2,2,2,2,2,1],
         logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Somos_Peru_logo.png/200px-Somos_Peru_logo.png",
-        candidato:"Patricia Li",
+        candidato:"Por confirmar (JNE)",
         fallback:"SP"
       }
     };
@@ -549,7 +551,6 @@
 
     function calc(){
       for (let p in score) score[p] = 0;
-
       ecoScore = 0;
       socScore = 0;
       segScore = 0;
@@ -670,7 +671,7 @@
           ${logoHTML(bestData.logo, bestData.fallback)}
           <div>
             <div class="party-name">${bestName}</div>
-            <div class="candidate">${bestData.candidato}</div>
+            <div class="candidate">Candidatura: ${bestData.candidato}</div>
             <div class="score">${bestPct}% de coincidencia</div>
           </div>
         </div>
@@ -699,7 +700,7 @@
             ${logoHTML(data.logo, data.fallback)}
             <div>
               <div class="party-name">#${idx + 1} ${name}</div>
-              <div class="candidate">${data.candidato}</div>
+              <div class="candidate">Candidatura: ${data.candidato}</div>
               <div class="score">${pct}% de coincidencia</div>
             </div>
           </div>
