@@ -77,6 +77,16 @@
       font-size:14px;
     }
 
+    .intro-decides{
+      margin:10px 0 18px 0;
+      text-align:center;
+      font-size:42px;
+      font-weight:900;
+      letter-spacing:12px;
+      opacity:.22;
+      line-height:1;
+    }
+
     .progress{
       height:10px;
       background:var(--soft);
@@ -220,6 +230,7 @@
       .header{font-size:28px}
       .question{font-size:24px}
       .tu-decides{font-size:24px;letter-spacing:7px}
+      .intro-decides{font-size:34px;letter-spacing:8px}
     }
   </style>
 </head>
@@ -231,6 +242,7 @@
     </div>
 
     <div class="header">🇵🇪 ELECCIONES 2026</div>
+    <div class="intro-decides">TÚ DECIDES</div>
     <h1>¿Con qué partido coincides más?</h1>
     <div class="counter">Personas que hicieron el test: <b id="contador">...</b></div>
     <button class="primary" type="button" onclick="startQuiz()">Empezar</button>
@@ -504,13 +516,13 @@
 
       $("exp").textContent = explicarResultado(ganador.name, ganador.score);
 
-      $("top3").innerHTML = resultados.slice(0,3).map(r => {
+      $("top3").innerHTML = resultados.slice(0,3).map((r, idx) => {
         const p = partidos[r.name];
         return `
           <div class="party">
             ${logoHtml(p)}
             <div>
-              <b>#${resultados.indexOf(r)+1} ${r.name}</b><br>
+              <b>#${idx + 1} ${r.name}</b><br>
               ${r.candidato}<br>
               <span class="score">${r.score}%</span>
             </div>
