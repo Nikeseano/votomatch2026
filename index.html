@@ -303,13 +303,13 @@ vector:[1,2,1,2,1,2,1,2,1,1,2,1,1,2,2,2,2,2,2,1]
 },
 
 "País para Todos":{
-logo:"https://upload.wikimedia.org/wikipedia/commons/8/8a/Pais_para_Todos_logo.png",
+logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Default_Logo.svg/200px-Default_Logo.svg.png",
 candidato:"Carlos Álvarez",
 vector:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 },
 
 "Obras":{
-logo:"https://upload.wikimedia.org/wikipedia/commons/b/b1/Obras_logo.png",
+logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Default_Logo.svg/200px-Default_Logo.svg.png",
 candidato:"Ricardo Belmont",
 vector:[1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 }
@@ -324,13 +324,23 @@ let respuestas=[];
 
 async function contadorGlobal(){
 
-let url="https://api.countapi.xyz/hit/votomatch2026/visitas";
+try{
 
-let r=await fetch(url);
+let r=
+await fetch("https://api.countapi.xyz/hit/votomatch2026/visitas");
 
-let data=await r.json();
+let data=
+await r.json();
 
-contador.innerText=data.value;
+document.getElementById("contador").innerText=
+data.value;
+
+}catch{
+
+document.getElementById("contador").innerText=
+"1000+";
+
+}
 
 }
 
@@ -464,7 +474,7 @@ ${results[0].score}% coincidencia
 
 
 exp.innerText=
-"Tu perfil muestra coincidencias en temas económicos, rol del Estado y políticas sociales con este partido.";
+"Tu perfil muestra afinidad ideológica con este partido considerando rol del Estado, economía y políticas sociales.";
 
 
 
@@ -539,7 +549,7 @@ function shareWhatsApp(){
 
 let texto=
 
-"Descubre con qué partido coincides para las elecciones 2026 🇵🇪 "+location.href;
+"Descubre con qué partido coincides en Elecciones 2026 🇵🇪 "+location.href;
 
 window.open(
 
